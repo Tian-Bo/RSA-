@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question2</title>
+</head>
+<body>
+    <h1>4-bit nibble substitution</h1>
+    <p>
+        4-bit nibble: <input type="text" id="or_nibble"><br><br>
+        output nibble: <textarea id="output_nibble"></textarea>
+        <input type="button" value="Substitute" onclick="substitute()">
+    </p>
+    <script>
+        function substitute() {
+            var matrix = Array();
+            matrix[0]= "1001";
+            matrix[1]= "0100";
+            matrix[2]= "1010";
+            matrix[3]= "1011";
+            matrix[4]= "1101";
+            matrix[5]= "0001";
+            matrix[6]= "1000";
+            matrix[7]= "0101";
+            matrix[8]= "0110";
+            matrix[9]= "0010";
+            matrix[10]= "0000";
+            matrix[11]= "0011";
+            matrix[12]= "1100";
+            matrix[13]= "1110";
+            matrix[14]= "1111";
+            matrix[15]= "0111";
+
+            var or_nibble = document.getElementById("or_nibble").value;
+            or_nibble = parseInt(or_nibble, 2);
+            var output_nibble = matrix[or_nibble];
+            //return output_nibble
+
+            document.getElementById("output_nibble").innerHTML = output_nibble;
+        }
+    </script>
+</body>
+</html>

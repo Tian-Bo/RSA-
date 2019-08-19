@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question3</title>
+</head>
+<body>
+    <h1>mix column</h1>
+    <p>
+        input 16-bit binary: <input type="text" id="input_binary"> <input type="button" value="Matrix multiply" onclick="matrixMultiply()">
+    </p>
+    <p>
+        matrix S:<br>
+        <p id="first_1"></p>
+        <p id="second_1"></p>
+    </p>
+    <p>
+        matrix M:<br>
+        <p id="first_2"></p>
+        <p id="second_2"></p>
+    </p>
+    <p>
+        output binary: <textarea id="output_binary"></textarea><br><br>
+    </p>
+    <p>
+        matrix M:<br>
+        <p id="first_3"></p>
+        <p id="second_3"></p>
+    </p>
+
+
+    <script src="./BigInteger.js"></script>
+    <script>
+        function matrixMultiply() {
+            var str_input = document.getElementById("input_binary").value;
+            var or_list = splitBinaryString(str_input, "first_1", "second_1");
+            var matrix_M = splitBinaryString("1 4 4 1", "first_2", "second_2");
+            var s00 = or_list[0];
+            var s01 = or_list[1];
+            var s10 = or_list[2];
+            var s11 = or_list[3];
+            // calculate the s00' s01' s10' s11'
+            var s_00 = XOR_4bit(s00, multiply(4, s10));
+            var s_01 = XOR_4bit(s01, multiply(4, s11));
+            var s_10 = XOR_4bit(multiply(4, s00), s10);
+            var s_11 = XOR_4bit(multiply(4, s01), s11);
+
+            var first_3 = pad(s_00) + " " + pad(s_01);
+            var second_3 = pad(s_10) + " " + pad(s_11);
+            var output = first_3 + " " + second_3;
+
+            document.getElementById("first_3").innerHTML = first_3;
+            document.getElementById("second_3").innerHTML = second_3;
+            document.getElementById("output_binary").innerHTML = output;
+
+        }
+        // pad binary into 4 bits
+        function pad(num) {
+            if (num.length < 4)
+            {
+                var result = "";
+                for (var i=num.toString().length; i<4; i++)
+                {
+                    result = "0" + result;
+                }
+                result = result + num.toString();
+                return result;
+            }
+            else {
+                return num;
+            }
+        }
+        // split the input string into a list and return the list
+        function splitBinaryString(str_input, sr1, sr2) {
+            var list_or = str_input.split(" ");
+            var first_1 = "";
+            var second_1 = "";
+            for (var i=0; i<list_or.length; i++)
+            {
+                if (i<2){
+                    first_1 += list_or[i].toString() + " ";
+                }
+                else
+                {
+                    second_1 += list_or[i].toString() + " ";
+                }
+            }
+            document.getElementById(sr1).innerHTML = first_1;
+            document.getElementById(sr2).innerHTML = second_1;
+            return list_or;
+        }
+        // multiplication by using lookup table
+        function multiply(num, binary) {
+            //var list = Array();
+            var list = [0,4,8,12,3,7,11,15,6,2,14,10,5,1,13,9]
+            if(num == 4)
+            {
+                var dem = parseInt(binary.toString(),2);
+                var result_d = list[dem];
+                var result_b = result_d.toString(2);
+                return result_b;
+            }
+        }
+        // Addition over GF(16)
+        function XOR_4bit(binary_1, binary_2) {
+            // convert binary number to decimal number
+            var int_1 = parseInt(binary_1, 2);
+            var int_2 = parseInt(binary_2, 2);
+
+            // OXR
+            var oxr_int = int_1 ^ int_2;
+
+            // convert decimal number to binary number
+            var oxr_binary = oxr_int.toString(2);
+            return oxr_binary;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

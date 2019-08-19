@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lab4</title>
+
+    <style>
+        .content{
+            width: 700px; 
+            margin: 70px auto;
+        }
+        .header{
+            height: 60px; 
+            border: 1px solid #FFEC9E; 
+            font-size: 16px; 
+            font-weight: bold; 
+            line-height: 60px; 
+            padding-left: 30px;
+            color: #F38500;
+        }
+        .main{
+            border: 1px solid #ccc;
+        }
+        .box{
+            margin: 30px 0px;
+            margin-left: 30px;
+            height: 420px;
+        }
+        .box tr td:first-of-type{
+            width: 170px;
+        }
+        .box tr input{
+            width: 120px;
+            height: 26px;
+            padding-left: 5px;
+        }
+        .box tr button{
+            padding: 5px 15px;
+            margin-left: 30px;
+            font-weight: bold;
+            color: blue;
+            background-color: #fff;
+        }
+        .box tr #verifing{
+            background-color: #FFFFE7;
+            color: #F38500;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div class="header">Unpadded RSA Signing - Verifying</div>
+    <div class="main">
+        <table class="box">
+            <tr>
+                <td><label for="prime_p">prime p:</label></td>
+                <td><input type="text" value="131" id="prime_p"></td>
+            </tr>
+            <tr>
+                <td><label for="prime_q">prime q:</label></td>
+                <td><input type="text" value="137" id="prime_q"></td>
+            </tr>
+            <tr>
+                <td><label for="">n=p*q</label></td>
+                <td id="prime_n">17947</td>
+            </tr>
+            <tr>
+                <td><label for="">Φ(n)=(p-1)*(q-1):</label></td>
+                <td id="prime_pq">17680</td>
+            </tr>
+            <tr>
+                <td><label for="generate_e">e:</label></td>
+                <td id="prime_e">17501</td>
+                <td><button id="generate_e">Generate e</button></td>
+            </tr>
+            <tr>
+                <td><label for="generate_d">d:</label></td>
+                <td id="prime_d">4741</td>
+                <td><button id="generate_d">Generate d</button></td>
+            </tr>
+            <tr>
+                <td><label for="signing">message:</label></td>
+                <td><input type="text" value="1234" id="prime_message"></td>
+                <td><button id="signing">Signing</button></td>
+            </tr>
+            <tr>
+                <td><label for="verifing">signature:</label></td>
+                <td><input type="text" value="2741" id="prime_signature"></td>
+                <td><button id="verifing">Verifing</button></td>
+                <td><button id="clear_message">Clear Message</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="BigInteger.js"></script>
+
+<script>
+
+    // 所有表单值
+    let prime_p = document.getElementById('prime_p')
+    let prime_q = document.getElementById('prime_q')
+    let prime_n = document.getElementById('prime_n')
+    let prime_pq = document.getElementById('prime_pq')
+    let prime_e = document.getElementById('prime_e')
+    let prime_d = document.getElementById('prime_d')
+    let prime_message = document.getElementById('prime_message')
+    let prime_signature = document.getElementById('prime_signature')
+
+    // 所有按钮
+    let generate_e = document.getElementById('generate_e')
+    let generate_d = document.getElementById('generate_d')
+    let signing = document.getElementById('signing')
+    let verifing = document.getElementById('verifing')
+    let clear_message = document.getElementById('clear_message')
+
+
+    // 监听prime_p的input值变化
+    prime_p.addEventListener('input', () => {
+        let prime_p_value = prime_p.value
+        let prime_q_value = prime_q.value
+
+        // n=p*q
+        prime_n.innerHTML = prime_p_value * prime_q_value
+
+        // Φ(n)=(p-1)*(q-1):
+        prime_pq.innerHTML = (prime_p_value - 1) * (prime_q_value - 1)
+    })
+    
+
+    // 监听prime_q的input值变化
+    prime_q.addEventListener('input', () => {
+        let prime_p_value = prime_p.value
+        let prime_q_value = prime_q.value
+        // n=p*q
+        prime_n.innerHTML = prime_p_value * prime_q_value
+
+        // Φ(n)=(p-1)*(q-1):
+        prime_pq.innerHTML = (prime_p_value - 1) * (prime_q_value - 1)
+    })
+
+
+    // 生成e
+    generate_e.addEventListener('click', () => {
+        let n = prime_n.innerHTML
+        let pq = prime_pq.innerHTML
+        let e = parseInt(Math.random() * pq)
+        let t = 0
+        let num = e
+        while(true) {
+            t = n % e
+            n = e
+            e = t
+
+            if (t == 1) {
+                prime_e.innerHTML = num
+                return
+            }
+
+            if (t == 0) {
+                e = parseInt(Math.random() * pq)
+                num = e
+            }
+        }
+    })
+
+
+    // 生成d
+    generate_d.addEventListener('click', () => {
+        let e = prime_e.innerHTML
+        let n = prime_n.innerHTML
+        let pq = prime_pq.innerHTML
+
+        let d = 0
+        for (let i=1; i<9999999; i++) {
+            d = (pq * i + 1) / e 
+            if(Number.isInteger(d)) {
+                prime_d.innerHTML = d
+                return
+            }
+        }
+    })
+
+
+    // 生成签名
+    signing.addEventListener('click', () => {
+        let prime_message_value = bigInt(prime_message.value)
+        let prime_n_innerHTML = bigInt(prime_n.innerHTML)
+        let prime_e_innerHTML = bigInt(prime_e.innerHTML)
+        let prime_d_innerHTML = bigInt(prime_d.innerHTML)
+
+        let secret_key = prime_message_value.pow(prime_d_innerHTML).mod(prime_n_innerHTML)  
+        prime_signature.value = secret_key.value
+    })
+
+
+    // 验证签名
+    verifing.addEventListener('click', () => {
+        let prime_message_value = bigInt(prime_message.value)
+        let prime_n_innerHTML = bigInt(prime_n.innerHTML)
+        let prime_e_innerHTML = bigInt(prime_e.innerHTML)
+        let prime_d_innerHTML = bigInt(prime_d.innerHTML)
+        let secret_key_value = bigInt(prime_signature.value)
+
+        let new_prime_message_value = secret_key_value.pow(prime_e_innerHTML).mod(prime_n_innerHTML)  
+
+        if (prime_message_value.value == new_prime_message_value.value) {
+            alert('验证成功')
+        } else {
+            alert('验证失败')
+        }
+        
+    })
+
+
+    // 清空input
+    clear_message.addEventListener('click', () => {
+        prime_message.value = ''
+        prime_signature.value = ''
+    })
+
+</script>
+</body>
+</html>
