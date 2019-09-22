@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lab7</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+        .color-1C94C4{
+            color: #1C94C4;
+            font-size: 16px;
+        }
+        body{
+            background-color: #f5f5f5;
+        }
+        header{
+            padding-left: 70px;
+            height: 50px;
+            line-height: 50px;
+            background-color: #fff;
+            color: orange;
+            border-bottom: orange solid 1px;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        table{
+            padding-left: 70px;
+        }
+
+        label{
+            position: relative;
+        }
+        #upload_files_btn{
+            margin-right: 5px;
+        }
+        #upload_files{
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <header>AES Encryption - Decryption</header>
+        <table>
+            <tr>
+                <td><label for="">32 hexadeciaml digits key(128 bits):</label></td>
+                <td><textarea id="key" cols="100" rows="2" oninput="FormatKey(this)"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="">Choose a file:</label></td>
+                <td>
+                    <label for="upload_files">
+                        <input type="button" id="upload_files_btn" value="Choose Files"><span id="upload_files_text">No file closen</span>
+                        <input type="file" name="files[]" id="upload_files" onchange="UpdateOnChange(this)" multiple></input>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">File contents</label></td>
+                <td><textarea name="" id="show_files" cols="100" rows="10"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="">Message for authentication:</label></td>
+                <td><textarea name="" id="hmacP" cols="100" rows="2"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for=""></label></td>
+                <td>
+                    <button type="button"  class="color-1C94C4" onclick="Encryption()">Encryption</button>
+                    <button type="button"  class="color-1C94C4" onclick="Decryption()">Decryption</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Encryted file:</label></td>
+                <td><textarea name="" cols="100" rows="10" id="contents"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="">HMAC:</label></td>
+                <td><textarea name="" id="hmacC" cols="100" rows="2"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="">Save file:</label></td>
+                <td>
+                    <input type="text" id="fileNmae1" style="height: 18px;">
+                    <button type="button" onclick="saveToFile('fileNmae1')" class="color-1C94C4">Save to file</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Save file with encryted info:</label></td>
+                <td>
+                    <input type="text" id="fileNmae2" style="height: 18px;">
+                    <button type="button" onclick="saveToFile('fileNmae2')" class="color-1C94C4">Save to file</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="./sjcl.js"></script>
+    <script>
+        let show_files = document.getElementById('show_files')
+        let ctObj;
+
+
+        // 格式化输入key
+        function FormatKey(event) {
+            event.value = formatBank(event.value)
+        }
+
+        // 上传txt文件 读取文件内容 写入file contents
+        function UpdateOnChange(event) {
+            let f = event.files[0]
+
+            document.getElementById('upload_files_text').innerHTML = f.name
+
+            var reader = new FileReader()
+            reader.readAsText(f)
+            reader.onload = function () {
+                //当读取完成后回调这个函数,然后此时文件的内容存储到了result中,直接操作即可
+                show_files.innerHTML = this.result
+            }
+        }
+
+        // 加密文件
+        function Encryption() {
+
+            let password = '';
+            let key = document.getElementById('key').value;
+            let contents = document.getElementById('show_files').value;
+            let hmacP = document.getElementById('hmacP').value;
+
+            let p = {
+                adata: hmacP,
+                iter: 1000,
+                mode: 'ccm',
+                ts: 64,
+                ks: 128
+            };
+
+            ctObj = sjcl.encrypt(key, contents, p);
+
+            document.getElementById('contents').value = JSON.parse(ctObj).ct;
+            document.getElementById('hmacC').value = JSON.parse(ctObj).adata
+        }
+        
+        // 解密文件
+        function Decryption() {
+            let key = document.getElementById('key').value;
+            let ct = document.getElementById('contents').value;
+            let plaintext = sjcl.decrypt(key, ctObj);
+
+            document.getElementById('contents').value = plaintext;
+        }
+
+        // 保存文件
+        function saveToFile(name) {
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = "display: none";
+
+            let data = document.getElementById('contents').value;
+
+
+            let fileName = document.getElementById(name).value;
+
+            if (name == 'fileNmae2') {
+                data = ctObj
+            }
+
+            let json = JSON.stringify(data);
+            let blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+            let url = window.URL.createObjectURL(blob);
+
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 格式化字符串八位自动加一位空格
+        function formatBank(val) {
+            if (val) {
+                return val.toString().replace(/\s/g, '').replace(/(.{8})/g, "$1 ");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>

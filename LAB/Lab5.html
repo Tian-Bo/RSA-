@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lab5</title>
+    <style>
+        [v-cloak]{
+            display: none
+        }
+        table{
+            border: 1px solid #ccc;
+        }
+        tr{
+            border-color: #ccc;
+        }
+        td{
+            border-color: #ccc;
+        }
+        input{
+            list-style: none;
+            width: 36px;
+            border: 0px;
+            height: 100%;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+            outline:0px;
+        }
+        #app{
+            margin: 100px auto;
+            height: 500px;
+            width: 1200px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+        }
+        
+        /* header */
+        .header{
+            margin: 5px;
+            background-color: #F8B64A;
+            height: 50px;
+            padding-left: 10px;
+            line-height: 50px;
+        }
+        .header-btn{
+            background-color: #fff;
+            color: orange;
+            height: 40px;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 0 15px;
+            font-size: 16px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        /* body */
+        .main{
+            display: flex;
+            justify-content: center;
+            margin-top: 70px;
+        }
+        .main-item{
+            margin: 30px;
+        }
+        .main-item{
+            margin: 30px;
+            text-align: center;
+        }
+        .main-item > span{
+            margin: 30px;
+        }
+        .main-item > div{
+            margin-top: 10px;
+            background-color: #fff;
+        }
+        .active > div{
+            background-color: #FDF5CE;
+        }
+        .active > div table{
+            border: 1px solid #F8BF5A;
+        }
+        .active > div td{
+            border-color: #F8BF5A;
+        }
+        .main-item tr{
+            text-align: center;
+        }
+        .main-item table tr:nth-of-type(2n) {
+            background-color: #D0E4F5;
+        }
+        .main-item table tr:nth-of-type(2n) input {
+            background-color: #D0E4F5;
+        }
+        .main-item td{
+            width: 40px;
+            height: 36px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header"><span class="header-btn">chi x step</span></div>
+    <div class="main">
+        <div class="main-item">
+            <span>Original B[x,y]</span>
+            <div>
+                <table cellspacing="0" border="1">
+                    <tr v-for="(val, i) in list" :key="i">
+                        <td v-for="(item, index) in val" :key="index"><input v-cloak type="text" v-model="list[i][index]"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="main-item active">
+            <span>B[x+1,y]</span>
+            <div>
+                <table cellspacing="0" border="1">
+                    <tr v-for="(val, i) in list" :key="i">
+                        <td v-cloak v-for="(item, index) in val" :key="index">{{ 
+                            (index + 1 > 4 ? list[i][index - 4] : list[i][index + 1]) == 1 ? 0 : 1
+                        }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="main-item active">
+            <span>B[x+2,y]</span>
+            <div>
+                <table cellspacing="0" border="1">
+                    <tr v-for="(val, index) in list" :key="index">
+                        <td v-cloak v-for="(item, index) in val" :key="index">{{ 
+                            index + 2 > 4 ? val[index - 3] : val[index + 2]
+                        }}</td>    
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="main-item">
+            <span>New A[x,y]</span>
+            <div>
+                <table cellspacing="0" border="1">
+                    <tr v-for="(val, i) in list" :key="i">
+                        <td v-cloak v-for="(item, index) in val" :key="index">
+                            {{ 
+                                ((index + 1 > 4 ? list[i][index - 4] : list[i][index + 1]) == 1 ? 0 : 1) == 1
+                                ? (index + 2 > 4 ? val[index - 3] : val[index + 2]) == list[i][index] ? 0 : 1 
+                                : ((index + 1 > 4 ? list[i][index - 4] : list[i][index + 1]) == 1 ? 0 : 1) == list[i][index] ? 0 : 1 
+                            }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            list: [
+                [0, 0, 0, 0 ,1 ], 
+                [0, 0, 0 ,1 ,1 ], 
+                [0, 0, 1 ,1 ,1 ], 
+                [0, 1, 1 ,1 ,1 ], 
+                [1, 1, 1 ,1 ,1 ]
+            ]
+        }
+    })
+</script>
+
+<script>
+    var list = [
+        [0, 0, 0, 0 ,1 ], 
+        [0, 0, 0 ,1 ,1 ], 
+        [0, 0, 1 ,1 ,1 ], 
+        [0, 1, 1 ,1 ,1 ], 
+        [1, 1, 1 ,1 ,1 ]
+    ];
+    for(var i=0; i<list.length; i++){
+        for(var j=0; j<list[i].length; j++){
+            console.log(list[i][j])
+        }
+    }
+</script>
+</body>
+</html>
