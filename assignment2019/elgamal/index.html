@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="../jquery-ui/jquery-1.11.3.js"></script>
+    <title>elgamal</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    button {
+        padding: 5px 15px;
+        margin: 5px 0;
+    }
+</style>
+<style>
+    /* encrypt_1 */
+    .encrypt_1 {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 20px;
+    }
+
+    .encrypt_1 tr {
+        height: 30px;
+    }
+</style>
+<style>
+    /* encrypt_2 */
+    .encrypt_2 {
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 30px 0;
+    }
+
+    .encrypt_2 .title {
+        margin-bottom: 30px;
+    }
+
+    .encrypt_2 .button {
+        margin-top: 30px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+
+
+    <div class="encrypt_1">
+
+        <table>
+            <tr>
+                <td>Input the prime modulus (P), the generator (G) and the order (Q);</td>
+            </tr>
+            <tr>
+                <td>P:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>P:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>P:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td><button>Random x</button></td>
+            </tr>
+            <tr>
+                <td>Random private key x: </td>
+                <td><input type="text"></td>
+                <td>1 < x < Q</td> </tr> <tr>
+                <td>Calculated Y</td>
+            </tr>
+            <tr>
+                <td><button>generate</button></td>
+            </tr>
+            <tr>
+                <td>Y:</td>
+                <td><input type="text"></td>
+                <td>Y = G mod P</td>
+            </tr>
+            <tr>
+                <td>The public key is now [P,G,Y]. The private key is x Alice then creates a message</td>
+            </tr>
+            <tr>
+                <td>Input Message M:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>Selects a random value (K), and calculates two new values (a and b)</td>
+            </tr>
+            <tr>
+                <td><button>Random k</button></td>
+            </tr>
+            <tr>
+                <td>k (random value):</td>
+                <td><input type="text"></td>
+                <td>1 < K < Q</td> </tr> <tr>
+                <td><button>encrypt</button></td>
+            </tr>
+            <tr>
+                <td>a value:</td>
+                <td><input type="text"></td>
+                <td>a = G mod P</td>
+            </tr>
+            <tr>
+                <td>b value:</td>
+                <td><input type="text"></td>
+                <td>b = Y M mod P</td>
+            </tr>
+            <tr>
+                <td>Next Bob decrypts the message</td>
+            </tr>
+            <tr>
+                <td><button>Decrypt</button></td>
+            </tr>
+            <tr>
+                <td>Message (decrypted):</td>
+                <td><input type="text"></td>
+                <td>M(plain) = b/a mod P</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="encrypt_2">
+        <div class="title">Multiplication Over Encrypted Data</div>
+        <table>
+            <tr>
+                <td style="width: 60px;">N1:</td>
+                <td><input type="text" value="1"></td>
+                <td>(an integer less than P)</td>
+            </tr>
+            <tr>
+                <td style="width: 60px;">N2:</td>
+                <td><input type="text" value="2"></td>
+                <td>(an integer less than P)</td>
+            </tr>
+            <tr>
+                <td style="width: 60px;">N3:</td>
+                <td><input type="text" value="3"></td>
+                <td>(an integer less than P)</td>
+            </tr>
+            <tr>
+                <td style="width: 60px;">N4:</td>
+                <td><input type="text" value="4"></td>
+                <td>(an integer less than P)</td>
+            </tr>
+            <tr>
+                <td style="width: 60px;">N5:</td>
+                <td><input type="text" value="5"></td>
+                <td>(an integer less than P)</td>
+            </tr>
+        </table>
+        <button class="button">Multiply</button>
+        <table>
+            <tr>
+                <td>Encrypted N1</td>
+                <td>Encrypted N2</td>
+                <td>Encrypted N3</td>
+                <td>Encrypted N4</td>
+                <td>Encrypted N5</td>
+            </tr>
+            <tr>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Product of the Encrypted Numbers:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>Product of the Plain Numbers:</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>Decrypted product of the Encrypted Numbers:</td>
+                <td><input type="text"></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <script></script>
+    <script>
+
+    </script>
+</body>
+
+</html>
