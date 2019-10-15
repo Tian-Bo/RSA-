@@ -61,107 +61,105 @@
             </tr>
             <tr>
                 <td>P:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="p" placeholder="809" value="809"></td>
             </tr>
             <tr>
-                <td>P:</td>
-                <td><input type="text"></td>
+                <td>G:</td>
+                <td><input type="text" id="g" placeholder="89" value="89"></td>
             </tr>
             <tr>
-                <td>P:</td>
-                <td><input type="text"></td>
+                <td>Q:</td>
+                <td><input type="text" id="q" placeholder="101" value="101"></td>
             </tr>
             <tr>
-                <td><button>Random x</button></td>
+                <td><button onclick="randomX()">Random x</button></td>
             </tr>
             <tr>
                 <td>Random private key x: </td>
-                <td><input type="text"></td>
+                <td><input type="text" id="x"></td>
                 <td>1 < x < Q</td> </tr> <tr>
                 <td>Calculated Y</td>
             </tr>
             <tr>
-                <td><button>generate</button></td>
+                <td><button onclick="calculationY()">generate</button></td>
             </tr>
             <tr>
                 <td>Y:</td>
-                <td><input type="text"></td>
-                <td>Y = G mod P</td>
+                <td><input type="text" id="y"></td>
+                <td>Y = G^x mod P</td>
             </tr>
             <tr>
                 <td>The public key is now [P,G,Y]. The private key is x Alice then creates a message</td>
             </tr>
             <tr>
                 <td>Input Message M:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="m"></td>
             </tr>
             <tr>
                 <td>Selects a random value (K), and calculates two new values (a and b)</td>
             </tr>
             <tr>
-                <td><button>Random k</button></td>
+                <td><button onclick="randomK()">Random k</button></td>
             </tr>
             <tr>
                 <td>k (random value):</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="k"></td>
                 <td>1 < K < Q</td> </tr> <tr>
-                <td><button>encrypt</button></td>
+                <td><button onclick="encrypt()">encrypt</button></td>
             </tr>
             <tr>
                 <td>a value:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="a"></td>
                 <td>a = G mod P</td>
             </tr>
             <tr>
                 <td>b value:</td>
-                <td><input type="text"></td>
-                <td>b = Y M mod P</td>
+                <td><input type="text" id="b"></td>
+                <td>b = Y^M mod P</td>
             </tr>
             <tr>
                 <td>Next Bob decrypts the message</td>
             </tr>
             <tr>
-                <td><button>Decrypt</button></td>
+                <td><button onclick="decrypt()">Decrypt</button></td>
             </tr>
             <tr>
                 <td>Message (decrypted):</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="de_m"></td>
                 <td>M(plain) = b/a mod P</td>
             </tr>
         </table>
     </div>
-
-
     <div class="encrypt_2">
         <div class="title">Multiplication Over Encrypted Data</div>
         <table>
             <tr>
                 <td style="width: 60px;">N1:</td>
-                <td><input type="text" value="1"></td>
+                <td><input type="text" id="n1" value="1"></td>
                 <td>(an integer less than P)</td>
             </tr>
             <tr>
                 <td style="width: 60px;">N2:</td>
-                <td><input type="text" value="2"></td>
+                <td><input type="text" id="n2" value="2"></td>
                 <td>(an integer less than P)</td>
             </tr>
             <tr>
                 <td style="width: 60px;">N3:</td>
-                <td><input type="text" value="3"></td>
+                <td><input type="text" id="n3" value="3"></td>
                 <td>(an integer less than P)</td>
             </tr>
             <tr>
                 <td style="width: 60px;">N4:</td>
-                <td><input type="text" value="4"></td>
+                <td><input type="text" id="n4" value="4"></td>
                 <td>(an integer less than P)</td>
             </tr>
             <tr>
                 <td style="width: 60px;">N5:</td>
-                <td><input type="text" value="5"></td>
+                <td><input type="text" id="n5" value="5"></td>
                 <td>(an integer less than P)</td>
             </tr>
         </table>
-        <button class="button">Multiply</button>
+        <button class="button" onclick="myMultiply()">Multiply</button>
         <table>
             <tr>
                 <td>Encrypted N1</td>
@@ -171,33 +169,232 @@
                 <td>Encrypted N5</td>
             </tr>
             <tr>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
+                <td><input type="text" id="en_n1"></td>
+                <td><input type="text" id="en_n2"></td>
+                <td><input type="text" id="en_n3"></td>
+                <td><input type="text" id="en_n4"></td>
+                <td><input type="text" id="en_n5"></td>
             </tr>
         </table>
         <table>
             <tr>
                 <td>Product of the Encrypted Numbers:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="en_n6"></td>
             </tr>
             <tr>
                 <td>Product of the Plain Numbers:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="en_n7"></td>
             </tr>
             <tr>
                 <td>Decrypted product of the Encrypted Numbers:</td>
-                <td><input type="text"></td>
+                <td><input type="text" id="en_n8"></td>
             </tr>
         </table>
     </div>
-
-
-    <script></script>
+    
+    <script src="BigInteger.js"></script>
     <script>
+        // common
+        function gcd(a, b) {
+            if (b == 0) {
+                return a
+            } else {
+                return gcd(b, a % b)
+            }
+        }
 
+    </script>
+
+    <script>
+        // encrypt_1
+
+        // 生成随机数x
+        function randomX() {
+            var p = document.getElementById('p').value;
+            var g = document.getElementById('g').value;
+            var q = document.getElementById('q').value;
+
+            if (p == '' || g == '' || q == '') {
+                return alert('Please input')
+            }
+
+            var x = 0;
+            var randomX = Math.floor((Math.random() * q) + 1);
+            while (gcd(randomX, q) != 1 || randomX == 1) {
+
+                randomX = Math.floor((Math.random() * q) + 1);
+            }
+
+            x = randomX;
+            document.getElementById('x').value = x
+        }
+
+        // 计算Y
+        function calculationY() {
+            var g = bigInt(parseInt(document.getElementById("g").value));
+            var p = bigInt(parseInt(document.getElementById("p").value));
+            var x = bigInt(parseInt(document.getElementById("x").value));
+
+            if (p == '' || g == '' || x == '') {
+                return alert('Please input')
+            }
+
+            var y = g.pow(x).mod(p) 
+            document.getElementById('y').value = y;
+
+        }
+
+        // 生成随机数k
+        function randomK() {
+            var p = document.getElementById('p').value;
+            var g = document.getElementById('g').value;
+            var q = document.getElementById('q').value;
+
+            if (p == '' || g == '' || q == '') {
+                return alert('Please input')
+            }
+
+            var k = 0;
+            var randomk = Math.floor((Math.random() * q) + 1);
+            while (gcd(randomk, q) != 1 || randomk == 1) {
+
+                randomk = Math.floor((Math.random() * q) + 1);
+            }
+            k = randomk;
+            document.getElementById('k').value = k
+        }
+
+        // 计算a, b
+        function encrypt() {
+            var p = bigInt(document.getElementById('p').value);
+            var g = bigInt(document.getElementById('g').value);
+            var k = bigInt(document.getElementById('k').value);
+            var y = bigInt(document.getElementById('y').value);
+            var m = bigInt(document.getElementById('m').value);
+
+            if (p == '' || g == '' || k == '' || y == '' || m == '') {
+                return alert('Please input')
+            }
+            // 计算a 
+            var a = g.pow(k).mod(p);
+            document.getElementById('a').value = a
+
+            // 计算b
+            var b = y.pow(k).multiply(m).mod(p);
+            document.getElementById('b').value = b
+        }
+        
+        // 解密m
+        function decrypt() {
+            var b = bigInt(document.getElementById('b').value);
+            var a = bigInt(document.getElementById('a').value);
+            var x = bigInt(document.getElementById('x').value);
+            var p = bigInt(document.getElementById('p').value);
+
+            if (b == '' || a == '' || x == '' || p == '') {
+                return alert('Please input')
+            }
+            var a = a.pow(p.subtract(1).subtract(x))
+            var m = a.multiply(b).mod(p);
+            document.getElementById('de_m').value = m;
+        }
+    </script>
+    <script>
+        // encrypt_2
+        function myMultiply() {
+            var n1 = bigInt(document.getElementById('n1').value);
+            var n2 = bigInt(document.getElementById('n2').value);
+            var n3 = bigInt(document.getElementById('n3').value);
+            var n4 = bigInt(document.getElementById('n4').value);
+            var n5 = bigInt(document.getElementById('n5').value);
+
+            var p = bigInt(809);
+            var q = bigInt(101);
+            var g = bigInt(89);
+            var x = bigInt(62);
+            var y = bigInt(393);
+
+
+
+            if (n1 == '' || n2 == '' || n3 == '' || n4 == '' || n5 == '') {
+                return alert('Please input')
+            }
+
+            var k = '';
+            var randomk = '';
+
+            var a = '';
+            var b = '';
+
+            // en_1
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n1').value = a + ',' + b
+            
+            // en_2
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n2').value = a + ',' + b
+
+            // en_3
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n3').value = a + ',' + b
+
+            // en_4
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n4').value = a + ',' + b
+
+            // en_5
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n5').value = a + ',' + b
+
+            // en_6
+            k = Math.floor((Math.random() * q) + 1);
+            while (gcd(k, q) != 1 || k == 1) {
+                k = Math.floor((Math.random() * q) + 1);
+            }
+            a = g.pow(k).mod(p);
+            b = y.pow(k).multiply(n1).mod(p);
+
+            document.getElementById('en_n6').value = a + ',' + b
+
+            // 计算 n7
+            var n7 = n1 * n2 * n3 * n4 * n5;
+            document.getElementById('en_n7').value = n7
+
+            // 计算 n8
+            var n8 = n5 * n4 * n3 * n2 * n1;
+            document.getElementById('en_n8').value = n8
+
+        }
     </script>
 </body>
 
